@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="com.liyao.app.phonebodyguard.MainActivity">
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:background="#ff3000"
+        >
+
+
+    </RelativeLayout>
+    <TableLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="1" >
+        <TableRow android:layout_weight="1">
+            <RelativeLayout style="@style/HomePage_MenuItem">
+                <TextView style="@style/HomePage_MenuTitle"
+                    android:id="@+id/tv_left_title1"
+                    android:text="清理加速"/>
+                <TextView style="@style/HomePage_MenuDetail"
+                    android:id="@+id/tv_left_detail1"
+                    android:layout_below="@+id/tv_left_title1"
+                    android:hint="剩余空间"/>
+                <ImageView style="@style/HomePage_MenuImg"
+                    android:layout_toLeftOf="@+id/tv_left_title1"
+                    android:src="@mipmap/menu_left_1" />
+            </RelativeLayout>
+            <RelativeLayout style="@style/HomePage_MenuItem">
+                <TextView style="@style/HomePage_MenuTitle"
+                    android:id="@+id/tv_right_title1"
+                    android:text="流量监控"/>
+                <TextView style="@style/HomePage_MenuDetail"
+                    android:id="@+id/tv_right_detail1"
+                    android:layout_below="@+id/tv_right_title1"
+                    android:hint="看看流量去哪儿了"/>
+                <ImageView style="@style/HomePage_MenuImg"
+                    android:layout_toLeftOf="@+id/tv_right_title1"
+                    android:src="@mipmap/menu_right_1" />
+            </RelativeLayout>
+        </TableRow>
+        <TableRow android:layout_weight="1">
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                >
+            </RelativeLayout>
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                >
+            </RelativeLayout>
+        </TableRow><TableRow android:layout_weight="1">
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            >
+        </RelativeLayout>
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            >
+        </RelativeLayout>
+    </TableRow>
+
+
+    </TableLayout>
+    <!-- <LinearLayout
+         android:layout_width="match_parent"
+         android:layout_height="match_parent"
+         android:orientation="vertical"
+         android:layout_weight="1">
+        <LinearLayout
+             android:layout_width="match_parent"
+             android:layout_height="match_parent"
+             android:orientation="horizontal"
+             android:layout_weight="1">
+             <RelativeLayout
+                 android:layout_width="match_parent"
+                 android:layout_height="match_parent"
+                 android:layout_weight="1"></RelativeLayout>
+             <RelativeLayout
+                 android:layout_width="match_parent"
+                 android:layout_height="match_parent"
+                 android:layout_weight="1"></RelativeLayout>
+
+         </LinearLayout>
+         <LinearLayout
+             android:layout_width="match_parent"
+             android:layout_height="match_parent"
+             android:layout_weight="1"></LinearLayout>
+         <LinearLayout
+             android:layout_width="match_parent"
+             android:layout_height="match_parent"
+             android:layout_weight="1"></LinearLayout>
+
+    </LinearLayout> -->
+
+
+</LinearLayout>

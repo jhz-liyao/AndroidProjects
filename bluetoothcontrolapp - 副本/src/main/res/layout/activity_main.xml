@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="com.liyao.app.bluetoothcontrolapp.MainActivity">
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="3"
+        >
+    <Button
+        android:id="@+id/btn_search"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="开始搜索"
+        android:onClick="btn_search_onClick"
+        />
+    <Button
+        android:id="@+id/btn_stopsearch"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="停止搜索"
+        android:layout_toRightOf="@+id/btn_search"
+        android:onClick="btn_stopsearch_onClick"
+        />
+    </RelativeLayout>
+
+
+    <ListView
+        android:id="@+id/lv_binddevlist"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="2"
+        />
+
+    <ListView
+        android:id="@+id/lv_devlist"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="2"/>
+
+</LinearLayout>

@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:id="@+id/root"
+    tools:context="com.liyao.app.myapplication.MainActivity">
+
+    <TextView
+        android:id="@+id/tv_show"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Hello World!" />
+    <Button
+
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:onClick="test_onClick"
+        android:text="测试"/>
+
+    <com.liyao.app.myapplication.VirtualJoystick
+        android:id="@+id/vj_joystick"
+        android:layout_width="377px"
+        android:layout_height="377px"/>
+
+
+</LinearLayout>

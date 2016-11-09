@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="com.liyao.app.phonebodyguard.MainActivity">
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:background="#ff3000">
+
+        <ImageView
+            android:id="@+id/iv_outflash"
+            android:src="@mipmap/ow"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_centerHorizontal="true"
+            />
+        <ImageView
+            android:id="@+id/iv_inflash"
+            android:src="@mipmap/outflash"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_centerHorizontal="true"
+            />
+        <TextView style="@style/HomePage_Title"
+            android:id="@+id/tv_top_title"
+            android:text="SD卡剩余空间" />
+        <TextView style="@style/HomePage_Detail"
+            android:id="@+id/tv_top_detail"
+            android:layout_below="@+id/tv_top_title"
+
+            android:text="**GB" />
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:onClick="test"
+        android:text="测试"/>
+
+    </RelativeLayout>
+    <TableLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="1" android:shrinkColumns="*">
+        <TableRow android:layout_weight="1" >
+            <RelativeLayout style="@style/HomePage_MenuItem" android:id="@+id/homepage_rl_menu_left_1">
+                <TextView style="@style/HomePage_MenuTitle"
+                    android:id="@+id/tv_left_title1"
+                    android:text="清理加速"/>
+                <TextView style="@style/HomePage_MenuDetail"
+                    android:id="@+id/tv_left_detail1"
+                    android:layout_below="@+id/tv_left_title1"
+                    android:hint="剩余空间"/>
+                <ImageView style="@style/HomePage_MenuImg"
+                    android:layout_toLeftOf="@+id/tv_left_title1"
+                    android:src="@mipmap/menu_left_1" />
+            </RelativeLayout>
+            <RelativeLayout style="@style/HomePage_MenuItem" android:id="@+id/homepage_rl_menu_right_1">
+                <TextView style="@style/HomePage_MenuTitle"
+                    android:id="@+id/tv_right_title1"
+                    android:text="短信备份"/>
+                <TextView style="@style/HomePage_MenuDetail"
+                    android:id="@+id/tv_right_detail1"
+                    android:layout_below="@+id/tv_right_title1"
+                    android:hint="备份在SD卡根目录smss.xml"/>
+                <ImageView style="@style/HomePage_MenuImg"
+                    android:layout_toLeftOf="@+id/tv_right_title1"
+                    android:src="@mipmap/menu_right_1" />
+            </RelativeLayout>
+        </TableRow>
+        <TableRow android:layout_weight="1">
+            <RelativeLayout style="@style/HomePage_MenuItem" android:id="@+id/homepage_rl_menu_left_2">
+                <TextView style="@style/HomePage_MenuTitle"
+                    android:id="@+id/tv_left_title2"
+                    android:text="骚扰拦截"/>
+                <TextView style="@style/HomePage_MenuDetail"
+                    android:id="@+id/tv_left_detail2"
+                    android:layout_below="@+id/tv_left_title2"
+                    android:hint="防骚扰反欺诈"/>
+                <ImageView style="@style/HomePage_MenuImg"
+                    android:layout_toLeftOf="@+id/tv_left_title2"
+                    android:src="@mipmap/menu_left_2" />
+            </RelativeLayout>
+            <RelativeLayout style="@style/HomePage_MenuItem" android:id="@+id/homepage_rl_menu_right_2">
+                <TextView style="@style/HomePage_MenuTitle"
+                    android:id="@+id/tv_right_title2"
+                    android:text="360理财"/>
+                <TextView style="@style/HomePage_MenuDetail"
+                    android:id="@+id/tv_right_detail2"
+                    android:layout_below="@+id/tv_right_title2"
+                    android:hint="送您8000元体验金"/>
+                <ImageView style="@style/HomePage_MenuImg"
+                    android:layout_toLeftOf="@+id/tv_right_title2"
+                    android:src="@mipmap/menu_right_2" />
+            </RelativeLayout>
+        </TableRow>
+        <TableRow android:layout_weight="1">
+            <RelativeLayout style="@style/HomePage_MenuItem" android:id="@+id/homepage_rl_menu_left_3">
+                <TextView style="@style/HomePage_MenuTitle"
+                    android:id="@+id/tv_left_title3"
+                    android:text="骚扰拦截"/>
+                <TextView style="@style/HomePage_MenuDetail"
+                    android:id="@+id/tv_left_detail3"
+                    android:layout_below="@+id/tv_left_title3"
+                    android:hint="防骚扰反欺诈"/>
+                <ImageView style="@style/HomePage_MenuImg"
+                    android:layout_toLeftOf="@+id/tv_left_title3"
+                    android:src="@mipmap/menu_left_3" />
+            </RelativeLayout>
+            <RelativeLayout style="@style/HomePage_MenuItem" android:id="@+id/homepage_rl_menu_right_3">
+                <TextView style="@style/HomePage_MenuTitle"
+                    android:id="@+id/tv_right_title3"
+                    android:text="360理财"/>
+                <TextView style="@style/HomePage_MenuDetail"
+                    android:id="@+id/tv_right_detail3"
+                    android:layout_below="@+id/tv_right_title3"
+                    android:hint="送您8000元体验金"/>
+                <ImageView style="@style/HomePage_MenuImg"
+                    android:layout_toLeftOf="@+id/tv_right_title3"
+                    android:src="@mipmap/menu_right_3" />
+            </RelativeLayout>
+        </TableRow>
+     </TableLayout>
+</LinearLayout>
