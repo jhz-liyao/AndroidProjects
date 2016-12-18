@@ -5,8 +5,6 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Handler;
 import android.os.Message;
-import android.os.SystemClock;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -15,16 +13,11 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.liyao.app.homecontrolcenter.moduleboard.Gateway.Gateway;
 import com.liyao.app.homecontrolcenter.moduleboard.WaterMachine.WaterMachine;
-import com.liyao.app.homecontrolcenter.moduleboard.WaterMachine.send_p.CmdProtocol;
 import com.liyao.app.homecontrolcenter.protocolframe.ProtocolManager;
-import com.liyao.app.homecontrolcenter.protocolframe.ProtocolTransferInterface;
 import com.liyao.app.homecontrolcenter.protocolframe.RecvProtocolBase;
-import com.liyao.app.homecontrolcenter.protocolframe.SendProtocolBase;
 import com.liyao.app.homecontrolcenter.protocolframe.vo.MessageVO;
-import com.liyao.app.homecontrolcenter.protocolframe.vo.TransmitDataVO;
-
-import java.util.List;
 
 public class MainActivity extends Activity {//extends AppCompatActivity{//
     static final String TAG = "MainActivity";
@@ -38,6 +31,16 @@ public class MainActivity extends Activity {//extends AppCompatActivity{//
             messageBuffer.append(message);
             tv_messageView.setText(messageBuffer.toString());
             sv_messageScroll.fullScroll(ScrollView.FOCUS_DOWN);
+        }
+    };
+
+    Handler CyclicGetStateHandler = null;
+    Runnable CyclicGetStateRunnable=new Runnable() {
+        @Override
+        public void run() {
+            // TODO Auto-generated method stub
+            Gateway.GetDevState();
+            CyclicGetStateHandler.postDelayed(this, 10000);
         }
     };
     SharedPreferences sp = null;
@@ -57,13 +60,18 @@ public class MainActivity extends Activity {//extends AppCompatActivity{//
             et_ip.setText(sp.getString("IP",""));
             et_port.setText(sp.getString("PORT",""));
         }else{
-            et_ip.setText("192.168.4.1");
-            et_port.setText("8080");
+            et_ip.setText("liyao.51vip.biz");
+            et_port.setText("37664");
         }
 
         new FetchMessage().start();
         new ProtocolHandle().start();
+        btn_connect_onClick(null);
 
+        if(CyclicGetStateHandler == null){
+            CyclicGetStateHandler = new Handler();
+            CyclicGetStateHandler.postDelayed(CyclicGetStateRunnable, 2000);
+        }
 
     }
 
@@ -127,6 +135,12 @@ public class MainActivity extends Activity {//extends AppCompatActivity{//
         Toast.makeText(this, "关闭饮水机", Toast.LENGTH_SHORT ).show();
     }
 
+    public void btn_test_onClick(View v){
+
+        Gateway.GetDevState();
+        Log.i(TAG, "测试按钮");
+
+    }
 
     public class FetchMessage extends Thread {
         @Override

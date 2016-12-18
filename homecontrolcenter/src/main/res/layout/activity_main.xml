@@ -77,7 +77,148 @@
             android:onClick="btn_ysj_close_onClick"
             android:layout_toRightOf="@+id/btn_ysj_open"
             android:layout_below="@+id/tv_ysj"/>
+        <Button
+            android:layout_width="70dp"
+            android:layout_height="wrap_content"
+            android:text="TEST"
+            android:id="@+id/btn_test"
+            android:onClick="btn_test_onClick"
+            android:layout_toRightOf="@+id/btn_ysj_close"
+            android:layout_below="@+id/tv_ysj"/>
 
     </RelativeLayout>
+    <RelativeLayout
+        android:id="@+id/rl_SoilSensor"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/rl_WaterMachine"
+        android:layout_marginTop="10dp">
+        <TextView
+            android:id="@+id/tv_lab0"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="电池"/>
+        <TextView
+            android:id="@+id/tv_labv0"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/tv_lab0"
+            android:text="NaN"/>
+        <TextView
+            android:id="@+id/tv_lab1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@+id/tv_lab0"
+            android:layout_marginLeft="10dp"
+            android:text="监测1"/>
 
+        <TextView
+            android:id="@+id/tv_labv1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="13dp"
+            android:layout_toRightOf="@+id/tv_lab0"
+            android:layout_below="@+id/tv_lab1"
+            android:text="NaN"/>
+        <TextView
+        android:id="@+id/tv_lab2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@+id/tv_lab1"
+        android:layout_marginLeft="10dp"
+        android:text="监测2"/>
+
+        <TextView
+            android:id="@+id/tv_labv2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="13dp"
+            android:layout_toRightOf="@+id/tv_lab1"
+            android:layout_below="@+id/tv_lab2"
+            android:text="NaN"/>
+        <TextView
+            android:id="@+id/tv_lab3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@+id/tv_lab2"
+            android:layout_marginLeft="10dp"
+            android:text="监测3"/>
+
+        <TextView
+            android:id="@+id/tv_labv3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="13dp"
+            android:layout_toRightOf="@+id/tv_lab2"
+            android:layout_below="@+id/tv_lab3"
+            android:text="NaN"/>
+        <TextView
+            android:id="@+id/tv_lab4"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@+id/tv_lab3"
+            android:layout_marginLeft="10dp"
+            android:text="监测4"/>
+
+        <TextView
+            android:id="@+id/tv_labv4"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="13dp"
+            android:layout_toRightOf="@+id/tv_lab3"
+            android:layout_below="@+id/tv_lab4"
+            android:text="NaN"/>
+        <TextView
+            android:id="@+id/tv_lab5"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@+id/tv_lab4"
+            android:layout_marginLeft="10dp"
+            android:text="监测5"/>
+
+        <TextView
+            android:id="@+id/tv_labv5"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="13dp"
+            android:layout_toRightOf="@+id/tv_lab4"
+            android:layout_below="@+id/tv_lab5"
+            android:text="NaN"/>
+        <TextView
+            android:id="@+id/tv_lab6"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@+id/tv_lab5"
+            android:layout_marginLeft="10dp"
+            android:text="监测6"/>
+
+        <TextView
+            android:id="@+id/tv_labv6"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="13dp"
+            android:layout_toRightOf="@+id/tv_lab5"
+            android:layout_below="@+id/tv_lab6"
+            android:text="NaN"/>
+        <TextView
+            android:id="@+id/tv_lab7"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@+id/tv_lab6"
+            android:layout_marginLeft="10dp"
+            android:text="监测7"/>
+
+        <TextView
+            android:id="@+id/tv_labv7"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="13dp"
+            android:layout_toRightOf="@+id/tv_lab6"
+            android:layout_below="@+id/tv_lab7"
+            android:text="NaN"/>
+        <TextView
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content" />
+
+    </RelativeLayout>
 </RelativeLayout>

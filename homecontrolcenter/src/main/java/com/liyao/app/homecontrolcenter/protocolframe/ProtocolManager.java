@@ -1,21 +1,18 @@
 package com.liyao.app.homecontrolcenter.protocolframe;
 
-import android.os.SystemClock;
 import android.util.Log;
 
 
 import com.liyao.app.homecontrolcenter.MessageManager;
 import com.liyao.app.homecontrolcenter.SocketManager;
-import com.liyao.app.homecontrolcenter.moduleboard.WaterMachine.receive_p.StateProtocol;
+import com.liyao.app.homecontrolcenter.moduleboard.SoilSensor.receive_p.SoilSensorStateProtocol;
+import com.liyao.app.homecontrolcenter.moduleboard.WaterMachine.receive_p.WaterStateProtocol;
 import com.liyao.app.homecontrolcenter.protocolframe.vo.TransmitDataVO;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
-import java.util.concurrent.locks.Lock;
-import java.util.concurrent.locks.ReentrantLock;
 
 /**
  * Created by liyao on 2016年10月22日
@@ -25,13 +22,19 @@ public class ProtocolManager {
     //模块
     public static final byte COORDINATOR_MODULE = 0x00;
     public static final byte WATER_MODULE = 0x01;
+    public static final byte SOIL_SENSOR_MODULE = 0x02;
+    public static final byte GATETAY_MODULE = 0x0F;
     /*协议列表*/
-    //接收协议
-    public static final short STATE_PROTOCOL = (WATER_MODULE << 4 | COORDINATOR_MODULE) <<8 |0x20;
-    //发送协议
-    public static final short CMD_PROTOCOL = (COORDINATOR_MODULE << 4 | WATER_MODULE) <<8 |0x01;
-    public static final short STATEGET_PROTOCOL   = (COORDINATOR_MODULE << 4 | WATER_MODULE) <<8 |0x02;
+    //网关发送协议
+    public static final short CMD_PROTOCOL = (short) ((GATETAY_MODULE << 4 | COORDINATOR_MODULE) << 8 |0x00);
+    //饮水机接收协议
+    public static final short WATER_STATE_PROTOCOL = (WATER_MODULE << 4 | COORDINATOR_MODULE) <<8 |0x20;
+    //饮水机发送协议
+    public static final short WATER_CMD_PROTOCOL = (COORDINATOR_MODULE << 4 | WATER_MODULE) <<8 |0x01;
+    public static final short WATER_STATEGET_PROTOCOL   = (COORDINATOR_MODULE << 4 | WATER_MODULE) <<8 |0x02;
 
+    //土壤传感器接收协议
+    public static final short SOIL_SENSOR_STATE_PROTOCOL = (SOIL_SENSOR_MODULE << 4 | COORDINATOR_MODULE) <<8 | 0x01;
 
     //public static ProtocolTransfer sendThread = new ProtocolTransfer();//发送线程
     //public static ProtocolMatch    recvThread = new ProtocolMatch();//接收线程
@@ -48,22 +51,19 @@ public class ProtocolManager {
 //    public static Lock sendProtocolList_Lock = new ReentrantLock();
     private static byte sendSerial = 0;
     public static void Init(){
-        receiveRegister(new StateProtocol()); //接收协议注册
+
+        receiveRegister(new WaterStateProtocol()); //接收协议注册
+        receiveRegister(new SoilSensorStateProtocol()); //接收协议注册
     }
 
     private static void receiveRegister(RecvProtocolBase rpb){
         templateProtocolList.add(rpb);
     }
 
-    public static void putSocketData(TransmitDataVO vo){//对socket提供的数据保存接口
-        try {
-            receiveData.put(vo);
-            Log.e("","receiveData_SIZE"+receiveData.size());
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-    }
-
+    /**
+     * 将协议添加至发送缓冲区
+     * @param spb
+     */
     public static void sendProtocol(SendProtocolBase spb){
         if(SocketManager.state != SocketManager.SocketState.OPEN){
             MessageManager.send("控制中心未连接");
@@ -78,6 +78,10 @@ public class ProtocolManager {
         }
     }
 
+    /**
+     * 从接收协议缓冲区中将协议取出，下一步执行handle
+     * @return
+     */
     public static RecvProtocolBase fetchProtocol(){
         try {
             RecvProtocolBase rpb = recvProtocolQueue.take();
@@ -92,10 +96,16 @@ public class ProtocolManager {
 
     static boolean hasHead = false;
     static List<Byte> singleProtocol = null;
+
+    /**
+     * 处理socket读到的数据进行封装，添加到接收缓冲区
+     * @param vo
+     */
     public static void protocolMatch(TransmitDataVO vo){
         try {
             for(int i = 0; i < vo.getLen(); i++) {
                 byte tmpData = vo.getData()[i];
+                //Log.i("",Integer.toHexString(tmpData));
                 if(tmpData != (byte)0xFD && hasHead == false)
                     continue;
                 if (tmpData == (byte)0xFD) {
@@ -109,7 +119,7 @@ public class ProtocolManager {
                     singleProtocol.add(tmpData);
                 }
                 if(tmpData == (byte)0xF8){
-                    Log.e("","出现F8");
+                    Log.i(TAG,"收到完整协议");
                     byte module = singleProtocol.get(3);
                     byte action = singleProtocol.get(5);
                     short ModuleAction = (short)((module << 8) | action);
@@ -120,9 +130,11 @@ public class ProtocolManager {
                                 recvProtocolQueue.put(tmprpb);
                             hasHead = false;
                             singleProtocol = new ArrayList<>();
-                            Log.e("","recvProtocolQueue.PUT");
+                            Log.i("","协议加入缓存队列");
+                            break;
                         }
                     }
+                    hasHead = false;
                 }
             }
         }catch(Exception e){
@@ -134,13 +146,20 @@ public class ProtocolManager {
 
 
     public static class SocketCom implements ProtocolTransferInterface{
-
+        /**
+         * socket调用此函数将数据进行处理
+         * @param vo
+         */
         @Override
         public void socketRead(TransmitDataVO vo) {
             //MessageManager.send(vo.convertCN());
             protocolMatch(vo);
         }
 
+        /**
+         * socket调用此函数获取准备发送的数据（提取发送协议缓冲区数据）
+         * @return
+         */
         @Override
         public TransmitDataVO socketSend() {
             SendProtocolBase spb = null;
@@ -149,111 +168,14 @@ public class ProtocolManager {
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
-            List<Byte> data = spb.getByteList(sendSerial++);
-            TransmitDataVO vo = new TransmitDataVO();
-            vo.setLen(data.size());
-            vo.setData(data);
-            return vo;
-        }
-    }
-
-
-    static class ProtocolMatch  extends Thread{
-        public boolean exit = false;
-        public void cancel(){
-            exit = true;
-            this.interrupt();
-        }
-        @Override
-        public void run() {
-            super.run();
-            TransmitDataVO vo = null;
-            boolean hasHead = false;
-            List<Byte> singleProtocol = new ArrayList<Byte>();
-            while(!this.isInterrupted() && !exit) {
-                RecvProtocolBase rpb = null;
-                byte tmpData = 0;
-                try {
-                    while(!this.isInterrupted()){
-                        vo = receiveData.take();
-                        Log.e("","收到数据");
-                        for(int i = 0; i < vo.getLen(); i++) {
-                            tmpData = vo.getData()[i];
-                            if (tmpData == (byte)0xFD) {
-                                if(hasHead){
-                                    throw new Exception("FD重复");
-                                }
-                                hasHead = true;
-                                singleProtocol = new ArrayList<>();
-                            }
-                            if(hasHead){
-                                singleProtocol.add(tmpData);
-                            }
-                            if(tmpData == (byte)0xF8){
-                                Log.e(TAG,"出现F8");
-                                byte module = singleProtocol.get(3);
-                                byte action = singleProtocol.get(5);
-                                short ModuleAction = (short)((module << 8) | action);
-                                for(int j = 0; j < templateProtocolList.size(); j++){
-                                    if(ModuleAction == templateProtocolList.get(j).ModuleAction){
-                                        RecvProtocolBase tmprpb = templateProtocolList.get(j).getEntity(singleProtocol);
-                                        recvProtocolQueue.put(tmprpb);
-                                        Log.w(TAG, "协议put成功");
-                                        hasHead = false;
-                                        singleProtocol = new ArrayList<>();
-                                        Log.e("","recvProtocolQueue.PUT");
-                                    }
-                                }
-
-                            }
-                        }
-                    }
-                }catch(Exception e){
-                    e.printStackTrace();
-                }finally {
-                    hasHead = false;
-                    singleProtocol = new ArrayList<>();
-                }
-                //SystemClock.sleep(50);
-            }
-        }
-    }
-
-    static class ProtocolTransfer  extends Thread{
-        public boolean exit = false;
-        public void cancel(){
-            exit = true;
-            this.interrupt();
-        }
-        @Override
-        public void run() {
-            super.run();
-            while(!this.isInterrupted() && !exit) {
-                try {
-                    SendProtocolBase spb = sendProtocolQueue.take();
-                    List<Byte> data = spb.getByteList(sendSerial++);
-                    TransmitDataVO vo = new TransmitDataVO();
-                    vo.setLen(data.size());
-                    vo.setData(data);
-                    //pti.socketRead(vo);
-                }catch(Exception e){
-                    e.printStackTrace();
-                }
-                //SystemClock.sleep(50);
-            }
-        }
-    }
-    /*public static class ProtocolUtil implements ProtocolCom{
-        @Override
-        public ProtocolBase distinguishProtocolType(byte[] protocolArray) {
-            switch (protocolArray[1]){
-                case ProtocolBase.RUN_PROTOCOL_TYPE:
-                    ProtocolBase pb = new RunProtocol(protocolArray);
-                    if(pb.integrityChecking())
-                        return pb;
-                    return null;
+            if(spb != null) {
+                List<Byte> data = spb.getByteList(sendSerial++);
+                TransmitDataVO vo = new TransmitDataVO();
+                vo.setLen(data.size());
+                vo.setData(data);
+                return vo;
             }
             return null;
         }
-    }*/
+    }
 }

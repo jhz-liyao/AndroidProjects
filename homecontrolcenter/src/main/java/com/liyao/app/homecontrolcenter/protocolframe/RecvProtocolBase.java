@@ -74,7 +74,7 @@ public abstract class RecvProtocolBase {
         }
         if (len - 8 != parameterList.size()) {
             String pStr = "";
-            for (byte b : parameterList) {
+            for (byte b : protocolList) {
                 pStr += (ProtocolUtil.hexToString(b) + " ");
             }
             Log.e(TAG, "协议长度不符:" + pStr);

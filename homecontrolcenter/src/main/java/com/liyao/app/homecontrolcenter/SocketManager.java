@@ -1,7 +1,9 @@
 package com.liyao.app.homecontrolcenter;
 
 import android.os.SystemClock;
+import android.util.Log;
 
+import com.liyao.app.homecontrolcenter.other.ProtocolUtil;
 import com.liyao.app.homecontrolcenter.protocolframe.ProtocolTransferInterface;
 import com.liyao.app.homecontrolcenter.protocolframe.vo.TransmitDataVO;
 
@@ -93,23 +95,35 @@ public class SocketManager {
             this.interrupt();
         }
 
+
+        /**
+         * socket发送线程
+         */
         @Override
         public void run() {
             super.run();
             while (!this.isInterrupted() && !exit) {
                 try {
                     TransmitDataVO vo = ptInterface.socketSend();
-                    if(vo != null){
+                    if(vo != null && os != null){
                         os.write(vo.getData(), 0, vo.getLen());
-                        MessageManager.send("发送成功");
+                        String tmpData = "";
+                        for(int i = 0; i < vo.getLen(); i++){
+                            tmpData += ProtocolUtil.hexToString(vo.getData()[i])+" ";
+                        }
+                        Log.i(TAG,"向Socket写入：" + tmpData);
+                        //MessageManager.send("发送成功");
                     }
                 } catch (Exception e) {
                     e.printStackTrace();
+                    Log.e("SocketSender", e.getMessage());
                 }
             }
         }
     }
-
+    /**
+     * socket接收线程
+     */
     static class SocketReceiver  extends Thread{
         public boolean exit = false;
         public void cancel(){
@@ -133,6 +147,7 @@ public class SocketManager {
                     }
                 }catch(Exception e){
                     e.printStackTrace();
+                    Log.e("SocketReceiver", e.getMessage());
                 }
             }
         }

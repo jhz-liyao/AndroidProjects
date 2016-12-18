@@ -216,7 +216,7 @@ public class ControlActivity extends Activity {
                 ControlAction.controlDirection(GlobalInfoVO.angle, GlobalInfoVO.deepness);
                 angle = GlobalInfoVO.angle;
                 deepness = GlobalInfoVO.deepness;
-                SystemClock.sleep(100);
+                SystemClock.sleep(200);
             }
         }
     }

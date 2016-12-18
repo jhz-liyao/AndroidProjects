@@ -1,7 +1,7 @@
 package com.liyao.app.homecontrolcenter.moduleboard.WaterMachine;
 
 
-import com.liyao.app.homecontrolcenter.moduleboard.WaterMachine.send_p.CmdProtocol;
+import com.liyao.app.homecontrolcenter.moduleboard.WaterMachine.send_p.WaterCmdProtocol;
 import com.liyao.app.homecontrolcenter.protocolframe.ProtocolManager;
 
 /**
@@ -9,14 +9,14 @@ import com.liyao.app.homecontrolcenter.protocolframe.ProtocolManager;
  */
 public class WaterMachine {
     public static void open(){
-        CmdProtocol cp= new CmdProtocol();
-        cp.setCmd(CmdProtocol.YSJ_OPEN);
+        WaterCmdProtocol cp= new WaterCmdProtocol();
+        cp.setCmd(WaterCmdProtocol.YSJ_OPEN);
         ProtocolManager.sendProtocol(cp);
     }
 
     public static void close(){
-        CmdProtocol cp= new CmdProtocol();
-        cp.setCmd(CmdProtocol.YSJ_CLOSE);
+        WaterCmdProtocol cp= new WaterCmdProtocol();
+        cp.setCmd(WaterCmdProtocol.YSJ_CLOSE);
         ProtocolManager.sendProtocol(cp);
 
     }

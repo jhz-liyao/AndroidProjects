@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/AndroidProjects.iml" filepath="$PROJECT_DIR$/AndroidProjects.iml" />
+      <module fileurl="file://$PROJECT_DIR$/Android_Projects.iml" filepath="$PROJECT_DIR$/Android_Projects.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
       <module fileurl="file://$PROJECT_DIR$/bluetoothcontrolapp/bluetoothcontrolapp.iml" filepath="$PROJECT_DIR$/bluetoothcontrolapp/bluetoothcontrolapp.iml" />
       <module fileurl="file://$PROJECT_DIR$/homecontrolcenter/homecontrolcenter.iml" filepath="$PROJECT_DIR$/homecontrolcenter/homecontrolcenter.iml" />
