@@ -16,6 +16,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.liyao.app.bluetoothcontrolapp.ClsUtils;
+import com.liyao.app.bluetoothcontrolapp.LinearControlActivity;
 import com.liyao.app.bluetoothcontrolapp.R;
 import com.liyao.app.bluetoothcontrolapp.services.BlueToothControlService;
 
@@ -147,7 +148,7 @@ public class BluetoothActivity extends Activity {
     public void tv_main_listview_bind_onClick(View v){
         TextView tv_main_listview_detail = (TextView)v;
         String deviceAddr = tv_main_listview_detail.getText().toString().split("\n")[1];
-        Intent intent = new Intent(this,ControlActivity.class);
+        Intent intent = new Intent(this,LinearControlActivity.class);
         intent.putExtra("DATA", deviceAddr);
         startActivity(intent);
     }

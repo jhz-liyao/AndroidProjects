@@ -18,6 +18,7 @@ import com.liyao.app.homecontrolcenter.moduleboard.WaterMachine.WaterMachine;
 import com.liyao.app.homecontrolcenter.protocolframe.ProtocolManager;
 import com.liyao.app.homecontrolcenter.protocolframe.RecvProtocolBase;
 import com.liyao.app.homecontrolcenter.protocolframe.vo.MessageVO;
+import com.liyao.app.homecontrolcenter.protocolframe.vo.TransmitDataVO;
 
 public class MainActivity extends Activity {//extends AppCompatActivity{//
     static final String TAG = "MainActivity";
@@ -72,7 +73,6 @@ public class MainActivity extends Activity {//extends AppCompatActivity{//
             CyclicGetStateHandler = new Handler();
             CyclicGetStateHandler.postDelayed(CyclicGetStateRunnable, 2000);
         }
-
     }
 
     @Override
@@ -138,6 +138,9 @@ public class MainActivity extends Activity {//extends AppCompatActivity{//
     public void btn_test_onClick(View v){
 
         Gateway.GetDevState();
+        byte data[] = {(byte)0xFD, (byte)0x00, (byte)0x05, (byte)0x0F, (byte)0xD3, (byte)0x01, (byte)0x1C, (byte)0x11, (byte)0x15, (byte)0xF8};
+        TransmitDataVO vo = new TransmitDataVO(data, data.length);
+        ProtocolManager.protocolMatch(vo);
         Log.i(TAG, "测试按钮");
 
     }

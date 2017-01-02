@@ -7,25 +7,25 @@
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
 
-    <!--允许应用程序改变网络状态-->
-    <uses-permission android:name="android.permission.CHANGE_NETWORK_STATE"/>
-    <!--允许应用程序改变WIFI连接状态-->
-    <uses-permission android:name="android.permission.CHANGE_WIFI_STATE"/>
-    <!--允许应用程序访问有关的网络信息-->
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
-    <!--允许应用程序访问WIFI网卡的网络信息-->
-    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE"/>
-    <!--允许应用程序完全使用网络-->
-    <uses-permission android:name="android.permission.INTERNET"/>
-    <!--SD卡权限-->
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
-    <!--SD卡移除权限-->
-    <uses-permission android:name="android.permission.MOUNT_UNMOUNT_FILESYSTEMS"/>
-    <!--摄像头权限-->
+    <!-- 允许应用程序改变网络状态 -->
+    <uses-permission android:name="android.permission.CHANGE_NETWORK_STATE" />
+    <!-- 允许应用程序改变WIFI连接状态 -->
+    <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
+    <!-- 允许应用程序访问有关的网络信息 -->
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <!-- 允许应用程序访问WIFI网卡的网络信息 -->
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <!-- 允许应用程序完全使用网络 -->
+    <uses-permission android:name="android.permission.INTERNET" />
+    <!-- SD卡权限 -->
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <!-- SD卡移除权限 -->
+    <uses-permission android:name="android.permission.MOUNT_UNMOUNT_FILESYSTEMS" />
+    <!-- 摄像头权限 -->
     <uses-permission android:name="android.permission.CAMERA" />
 
-    <uses-feature    android:name="android.hardware.camera" />
-    <uses-feature    android:name="android.hardware.camera.autofocus" />
+    <uses-feature android:name="android.hardware.camera" />
+    <uses-feature android:name="android.hardware.camera.autofocus" />
 
     <application
         android:allowBackup="true"
@@ -49,7 +49,8 @@
         <!-- 串口信息打印调试界面 -->
         <activity android:name=".bluetooth_activity.ShowWinActivity" />
         <!-- 图传测试界面 -->
-        <activity android:name=".wifi_activity.Fpv_Activity"
+        <activity
+            android:name=".wifi_activity.Fpv_Activity"
             android:launchMode="singleTask"
             android:screenOrientation="landscape" />
 
@@ -63,7 +64,15 @@
         <service
             android:name=".services.WifiControlService"
             android:enabled="true"
-            android:exported="true"></service>
+            android:exported="true" />
+
+        <activity android:name=".LinearControlActivity" android:screenOrientation="landscape"
+            android:launchMode="singleTask">
+            <!--<intent-filter>-->
+                <!--<action android:name="android.intent.action.MAIN" />-->
+                <!--<category android:name="android.intent.category.LAUNCHER" />-->
+            <!--</intent-filter>-->
+        </activity>
     </application>
 
 </manifest>

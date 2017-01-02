@@ -214,11 +214,26 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="13dp"
             android:layout_toRightOf="@+id/tv_lab6"
-            android:layout_below="@+id/tv_lab7"
-            android:text="NaN"/>
-        <TextView
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content" />
+            android:layout_below="@+id/tv_lab7"/>
 
+    </RelativeLayout>
+    <RelativeLayout
+        android:id="@+id/rl_environment"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/rl_SoilSensor"
+        android:layout_marginTop="10dp">
+    <TextView
+        android:id="@+id/tv_temperature"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="温度：NaN"/>
+    <TextView
+        android:id="@+id/tv_humidity"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@+id/tv_temperature"
+        android:layout_marginLeft="13dp"
+        android:text="湿度：NaN"/>
     </RelativeLayout>
 </RelativeLayout>

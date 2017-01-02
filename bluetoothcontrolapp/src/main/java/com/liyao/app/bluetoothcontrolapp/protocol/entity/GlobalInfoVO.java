@@ -6,6 +6,9 @@ import com.liyao.app.bluetoothcontrolapp.protocol.entity.sendprotocol.RunProtoco
  * Created by liyao on 2016/5/26.
  */
 public class GlobalInfoVO {
+    public static int speed = 0;
+    public static int offset = 0;
+
     public static int angle = 0;//摇杆角度
     public static int deepness = 0;//摇杆深度
 

@@ -14,7 +14,7 @@ import java.util.List;
  */
 public class StateProtocol extends RecvProtocolBase {
     public static int   DataSize = 1;
-    public static short ModuleAction = ProtocolManager.STATE_PROTOCOL;
+    public static short ModuleAction = ProtocolManager.WATER_STATE_PROTOCOL;
     public static final String STATE_CODE0 = "待机";
     public static final String STATE_CODE2 = "烧水完毕";
     public static final String STATE_CODE3 = "烧水中";

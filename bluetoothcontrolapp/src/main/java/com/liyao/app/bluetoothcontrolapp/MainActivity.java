@@ -66,6 +66,7 @@ public class MainActivity extends AppCompatActivity {
 
 
     public void btn_test_onClick(View v){
-
+        Intent intent = new Intent(this, LinearControlActivity.class);
+        startActivity(intent);
     }
 }

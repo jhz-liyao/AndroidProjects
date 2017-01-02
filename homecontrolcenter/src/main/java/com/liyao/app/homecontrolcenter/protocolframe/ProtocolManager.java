@@ -5,6 +5,7 @@ import android.util.Log;
 
 import com.liyao.app.homecontrolcenter.MessageManager;
 import com.liyao.app.homecontrolcenter.SocketManager;
+import com.liyao.app.homecontrolcenter.moduleboard.Coor_DHT11.receive_p.DHT11Protocol;
 import com.liyao.app.homecontrolcenter.moduleboard.SoilSensor.receive_p.SoilSensorStateProtocol;
 import com.liyao.app.homecontrolcenter.moduleboard.WaterMachine.receive_p.WaterStateProtocol;
 import com.liyao.app.homecontrolcenter.protocolframe.vo.TransmitDataVO;
@@ -35,7 +36,8 @@ public class ProtocolManager {
 
     //土壤传感器接收协议
     public static final short SOIL_SENSOR_STATE_PROTOCOL = (SOIL_SENSOR_MODULE << 4 | COORDINATOR_MODULE) <<8 | 0x01;
-
+    //DHT11温湿度传感器接收协议
+    public static final short DHT11_STATE_PROTOCOL = (COORDINATOR_MODULE << 4 | GATETAY_MODULE) <<8 | 0x01;
     //public static ProtocolTransfer sendThread = new ProtocolTransfer();//发送线程
     //public static ProtocolMatch    recvThread = new ProtocolMatch();//接收线程
 
@@ -54,6 +56,7 @@ public class ProtocolManager {
 
         receiveRegister(new WaterStateProtocol()); //接收协议注册
         receiveRegister(new SoilSensorStateProtocol()); //接收协议注册
+        receiveRegister(new DHT11Protocol()); //接收协议注册
     }
 
     private static void receiveRegister(RecvProtocolBase rpb){
