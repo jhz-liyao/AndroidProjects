@@ -118,7 +118,7 @@ public class BluetoothActivity extends Activity {
         TextView tv_main_listview_detail = (TextView)v;
         BluetoothDevice bluetoothDevice = bluetoothAdapter.getRemoteDevice(tv_main_listview_detail.getText().toString().split("\n")[1]);
         if (bluetoothDevice.getBondState() == BluetoothDevice.BOND_BONDED) {//已配对
-            Intent intent = new Intent(this, ShowWinActivity.class);
+            Intent intent = new Intent(this, LinearControlActivity.class);
             intent.putExtra("DATA", bluetoothDevice.getAddress());
             this.startActivity(intent);
 

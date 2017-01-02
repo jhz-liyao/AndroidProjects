@@ -1,7 +1,8 @@
 package com.liyao.app.bluetoothcontrolapp.action;
 
-import com.liyao.app.bluetoothcontrolapp.protocol.entity.sendprotocol.RunProtocol;
-import com.liyao.app.bluetoothcontrolapp.protocol.operation.ProtocolManager;
+import com.liyao.app.bluetoothcontrolapp.protocol.send.RudderProtocol;
+import com.liyao.app.bluetoothcontrolapp.protocol.send.RunProtocol;
+import com.liyao.app.bluetoothcontrolapp.protocolframe.ProtocolManager;
 
 import static java.lang.Math.abs;
 
@@ -42,6 +43,16 @@ public class ControlAction {
             rp.left_speed_l =(byte)(speed + speed * offset / 100);
             rp.right_speed_l = (byte)(speed - speed * offset/ 100);
         }
-        ProtocolManager.addProtocolQueue(rp);
+        ProtocolManager.sendProtocol(rp);
+
+
+
+    }
+
+    public static void rudderControl(int x,int y){
+        RudderProtocol rudder_p = new RudderProtocol();
+        rudder_p.X_Angle = (byte) x;
+        rudder_p.Y_Angle = (byte) y;
+        ProtocolManager.sendProtocol(rudder_p);
     }
 }

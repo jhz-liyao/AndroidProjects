@@ -42,12 +42,7 @@
         <!-- 蓝牙设备选择界面 点击已绑定设备进入摇杆界面↓   点击未绑定设备进入调试界面↓↓ -->
         <activity android:name=".bluetooth_activity.BluetoothActivity" />
         <!-- 摇杆遥控界面 -->
-        <activity
-            android:name=".bluetooth_activity.ControlActivity"
-            android:launchMode="singleTask"
-            android:screenOrientation="landscape" />
         <!-- 串口信息打印调试界面 -->
-        <activity android:name=".bluetooth_activity.ShowWinActivity" />
         <!-- 图传测试界面 -->
         <activity
             android:name=".wifi_activity.Fpv_Activity"

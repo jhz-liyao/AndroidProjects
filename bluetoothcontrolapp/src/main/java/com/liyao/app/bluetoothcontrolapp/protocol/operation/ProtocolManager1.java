@@ -7,8 +7,8 @@ import com.liyao.app.bluetoothcontrolapp.protocol.entity.ProtocolOperationVO;
 import com.liyao.app.bluetoothcontrolapp.protocol.entity.RecvProtocolBase;
 import com.liyao.app.bluetoothcontrolapp.protocol.entity.SendProtocolBase;
 import com.liyao.app.bluetoothcontrolapp.protocol.pinterface.ProtocolCom;
+import com.liyao.app.bluetoothcontrolapp.protocolframe.vo.TransmitDataVO;
 import com.liyao.app.bluetoothcontrolapp.services.BlueToothControlService;
-import com.liyao.app.bluetoothcontrolapp.vo.TransmitDataVO;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -19,7 +19,7 @@ import java.util.concurrent.locks.ReentrantLock;
 /**
  * Created by liyao on 2016/5/25.
  */
-public class ProtocolManager {
+public class ProtocolManager1 {
     public static List<RecvProtocolBase> recvProtocolList = new ArrayList();
     public static List<SendProtocolBase> sendProtocolList = new ArrayList();
     public static Lock recvProtocolList_Lock = new ReentrantLock();

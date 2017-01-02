@@ -12,7 +12,9 @@ import android.util.Log;
 
 import com.liyao.app.bluetoothcontrolapp.BluetoothClient;
 import com.liyao.app.bluetoothcontrolapp.bluetooth_interface.BluetoothCommunication;
-import com.liyao.app.bluetoothcontrolapp.vo.TransmitDataVO;
+import com.liyao.app.bluetoothcontrolapp.protocolframe.ProtocolManager;
+import com.liyao.app.bluetoothcontrolapp.protocolframe.ProtocolTransferInterface;
+import com.liyao.app.bluetoothcontrolapp.protocolframe.vo.TransmitDataVO;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -65,7 +67,7 @@ public class BlueToothControlService extends Service {
     }
 
     public class ServiceBinder extends Binder {
-        public void setBluetoothCommunication(String bluetoothAddr,BluetoothCommunication bluetoothCommunication){//注册回调函数
+        public void setBluetoothCommunication(String bluetoothAddr,ProtocolTransferInterface bluetoothCommunication){//注册回调函数
             bluetoothDevice = bluetoothAdapter.getRemoteDevice(bluetoothAddr);
             bluetoothClient = BluetoothClientManager.openBluetoothClient(bluetoothDevice);
             bluetoothClient.bluetoothCommunication = bluetoothCommunication;

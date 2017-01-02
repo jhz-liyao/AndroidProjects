@@ -9,14 +9,11 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
-import android.graphics.ImageFormat;
 import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.PorterDuff;
 import android.graphics.Rect;
-import android.graphics.YuvImage;
 import android.os.IBinder;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.SurfaceHolder;
@@ -26,11 +23,8 @@ import android.widget.Toast;
 
 import com.liyao.app.bluetoothcontrolapp.R;
 import com.liyao.app.bluetoothcontrolapp.services.WifiControlService;
-import com.liyao.app.bluetoothcontrolapp.vo.TransmitDataVO;
 import com.liyao.app.bluetoothcontrolapp.vo.WifiImageVO;
 import com.liyao.app.bluetoothcontrolapp.wifi_interface.WifiCommunication;
-
-import java.io.IOException;
 
 public class Fpv_Activity extends Activity {
     static final String TAG = "@Fpv_Activity@";

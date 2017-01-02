@@ -11,27 +11,20 @@ import android.content.ServiceConnection;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.os.SystemClock;
-import android.text.method.ScrollingMovementMethod;
+import android.view.View;
 import android.widget.ScrollView;
 import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.liyao.app.bluetoothcontrolapp.action.ControlAction;
-import com.liyao.app.bluetoothcontrolapp.bluetooth_interface.BluetoothCommunication;
 import com.liyao.app.bluetoothcontrolapp.customcontrol.VerticalSeekBar;
+import com.liyao.app.bluetoothcontrolapp.protocol.Protocol;
 import com.liyao.app.bluetoothcontrolapp.protocol.entity.GlobalInfoVO;
-import com.liyao.app.bluetoothcontrolapp.protocol.entity.ProtocolOperationVO;
-import com.liyao.app.bluetoothcontrolapp.protocol.entity.RecvProtocolBase;
-import com.liyao.app.bluetoothcontrolapp.protocol.entity.recvprotocol.StateProtocol;
-import com.liyao.app.bluetoothcontrolapp.protocol.operation.ProtocolManager;
-import com.liyao.app.bluetoothcontrolapp.protocol.operation.ProtocolUtil;
+import com.liyao.app.bluetoothcontrolapp.protocolframe.ProtocolManager;
+import com.liyao.app.bluetoothcontrolapp.protocolframe.RecvProtocolBase;
 import com.liyao.app.bluetoothcontrolapp.services.BlueToothControlService;
-import com.liyao.app.bluetoothcontrolapp.vo.TransmitDataVO;
 
-import java.util.ArrayList;
-
-import static java.lang.Math.abs;
 
 public class LinearControlActivity extends Activity {
     public static final String CONNECTION_SUCCESS = "com.liyao.app.bluetoothcontrolapp.receiver.connection_success";
@@ -45,19 +38,16 @@ public class LinearControlActivity extends Activity {
         @Override
         public void onServiceConnected(ComponentName name, IBinder service) {
             serviceBinder = (BlueToothControlService.ServiceBinder)service;
-            serviceBinder.setBluetoothCommunication(bluetoothAddr,new LinearControlActivity.RecvCallback());
-            ProtocolManager.serviceBinder = serviceBinder;
+            serviceBinder.setBluetoothCommunication(bluetoothAddr,new com.liyao.app.bluetoothcontrolapp.protocolframe.ProtocolManager.SocketCom());
+            //ProtocolManager.serviceBinder = serviceBinder;
         }
         @Override
         public void onServiceDisconnected(ComponentName name) {
         }
     };
     //全局相关
-    boolean isPause = false;
     LinearControlActivity.SendProtocol sendProtocol = new LinearControlActivity.SendProtocol();
     LinearControlActivity.RecvProtocol recvProtocol = new LinearControlActivity.RecvProtocol();
-    ProtocolUtil pu = new ProtocolUtil();
-    ProtocolOperationVO protocolOperationVO = new ProtocolOperationVO();
     LinearControlActivity.ControlMessageReceiver cmr = new LinearControlActivity.ControlMessageReceiver();
 
 
@@ -66,20 +56,33 @@ public class LinearControlActivity extends Activity {
     TextView tv_offset = null;
     VerticalSeekBar vsb_speed = null;
     TextView tv_speed = null;
+
+    SeekBar sb_rudder_x = null;
+    TextView tv_rudder_x = null;
+    VerticalSeekBar vsb_rudder_y = null;
+    TextView tv_rudder_y = null;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_linear_control);
+
 
         vsb_speed = (VerticalSeekBar)findViewById(R.id.vsb_speed);
         sb_offset = (SeekBar)findViewById(R.id.sb_offset);
         tv_speed = (TextView)findViewById(R.id.tv_speed);
         tv_offset = (TextView)findViewById(R.id.tv_offset);
 
-        tv_offset.setMovementMethod(ScrollingMovementMethod.getInstance());
-        tv_speed.setMovementMethod(ScrollingMovementMethod.getInstance());
+        vsb_rudder_y = (VerticalSeekBar)findViewById(R.id.vsb_rudder_y);
+        sb_rudder_x = (SeekBar)findViewById(R.id.sb_rudder_x);
+        tv_rudder_y = (TextView)findViewById(R.id.tv_rudder_y);
+        tv_rudder_x = (TextView)findViewById(R.id.tv_rudder_x);
+
+        //        tv_offset.setMovementMethod(ScrollingMovementMethod.getInstance());
+//        tv_speed.setMovementMethod(ScrollingMovementMethod.getInstance());
         vsb_speed.setOnSeekBarChangeListener( new OnSeekBarChangeListenerSpeed());
-        sb_offset.setOnSeekBarChangeListener(new OnSeekBarChangeListenerDir());
+        sb_offset.setOnSeekBarChangeListener(new OnSeekBarChangeListenerOffset());
+        vsb_rudder_y.setOnSeekBarChangeListener( new OnSeekBarChangeListenerRudderY());
+        sb_rudder_x.setOnSeekBarChangeListener(new OnSeekBarChangeListenerRudderX());
 
 
         Intent lastIntent = getIntent();//准备接收参数
@@ -91,8 +94,9 @@ public class LinearControlActivity extends Activity {
         bindService(intent, con, Service.BIND_AUTO_CREATE);
 
         //启动协议框架
-        if(ProtocolManager.protocolTransfer.getState() == Thread.State.NEW)
-            ProtocolManager.protocolTransfer.start();//启动协议框架线程
+//        if(ProtocolManager.protocolTransfer.getState() == Thread.State.NEW)
+//            ProtocolManager.protocolTransfer.start();//启动协议框架线程
+        Protocol.Init();
         //赋值滚动条
         sv_scroll = (ScrollView)this.findViewById(R.id.sv_scroll);
 
@@ -115,7 +119,7 @@ public class LinearControlActivity extends Activity {
         }
     }
 
-    public class RecvCallback implements BluetoothCommunication {
+   /* public class RecvCallback implements BluetoothCommunication {
         @Override
         public void receiveCallback(TransmitDataVO vo) {
             if(isPause) return;
@@ -135,66 +139,65 @@ public class LinearControlActivity extends Activity {
                 }
             });
         }
-    }
+    }*/
 
 
 
     public class SendProtocol extends Thread{
+        public boolean exit = false;
+        public void cancel(){
+            exit = true;
+            this.interrupt();
+        }
         @Override
         public void run() {
             super.run();
             int speed = 0;
             int offset = 0;
-            while(!this.isInterrupted()) {
+            int rudder_x = 0;
+            int rudder_y = 0;
+            while(!this.isInterrupted() && !exit) {
                 if(speed == GlobalInfoVO.speed && offset == GlobalInfoVO.offset) {
-                    SystemClock.sleep(100);
-                    continue;
+                    //SystemClock.sleep(100);
+                }else{
+                    ControlAction.controlDirection(GlobalInfoVO.speed, GlobalInfoVO.offset);
+                    speed = GlobalInfoVO.speed;
+                    offset = GlobalInfoVO.offset;
+                    SystemClock.sleep(200);
                 }
-                ControlAction.controlDirection(GlobalInfoVO.speed, GlobalInfoVO.offset);
-                speed = GlobalInfoVO.speed;
-                offset = GlobalInfoVO.offset;
-                SystemClock.sleep(200);
+                if(rudder_x == GlobalInfoVO.rudder_x && rudder_y == GlobalInfoVO.rudder_Y) {
+                    //SystemClock.sleep(100);
+                }else{
+                    ControlAction.rudderControl(GlobalInfoVO.rudder_x, GlobalInfoVO.rudder_Y);
+                    rudder_x = GlobalInfoVO.rudder_x;
+                    rudder_y = GlobalInfoVO.rudder_Y;
+                    SystemClock.sleep(200);
+                }
+                SystemClock.sleep(100);
             }
         }
     }
-
-    public class RecvProtocol extends Thread{
+    public void btn_rudder_homing_onClick(View v){
+        sb_rudder_x.setProgress(90);
+        vsb_rudder_y.setProgress(90);
+    }
+    public class RecvProtocol extends Thread {
+        public boolean exit = false;
+        public void cancel(){
+            exit = true;
+            this.interrupt();
+        }
         @Override
         public void run() {
-            super.run();
-            int ser = -1;
-            while(!this.isInterrupted()) {
-                ProtocolManager.recvProtocolList_Lock.lock();
-                try{
-                    for(RecvProtocolBase rpb:ProtocolManager.recvProtocolList){
-                        switch (rpb.getType() & 0xff){
-                            case ProtocolUtil.STATE_PROTOCOL_RECV_TYPE:
-                                StateProtocol sp = (StateProtocol)rpb;
-                                GlobalInfoVO.left_dir       = sp.left_dir;
-                                GlobalInfoVO.left_speed     = sp.left_speed_l;
-                                GlobalInfoVO.right_dir      = sp.right_dir;
-                                GlobalInfoVO.right_speed    = sp.right_speed_l;
-                                if(ser == -1) {
-                                    ser = sp.getSerial();
-                                }else{
-                                    ser++;
-                                    if(ser == 256)
-                                        ser = 0;
-                                    if((sp.getSerial()&0xff) != (ser&0xff)){
-                                        GlobalInfoVO.serialState = "异常";
-                                        //Log.w("err","序号丢失");
-                                    }
-                                }
-                                break;
-                        }
-                    }
-                    ProtocolManager.recvProtocolList = new ArrayList<>();
-                }catch (Exception e){
+            // TODO Auto-generated method stub
+            while(!this.isInterrupted() && !exit) {
+                try {
+                    RecvProtocolBase rpb =ProtocolManager.fetchProtocol();
+                    rpb.handle(LinearControlActivity.this);
+                } catch (Exception e) {
+                    // TODO Auto-generated catch block
                     e.printStackTrace();
-                }finally {
-                    ProtocolManager.recvProtocolList_Lock.unlock();
                 }
-                SystemClock.sleep(100);
             }
         }
     }
@@ -210,15 +213,33 @@ public class LinearControlActivity extends Activity {
                 Toast.makeText(LinearControlActivity.this, "蓝牙客户端连接失败", Toast.LENGTH_SHORT).show();
             }else if(DISCONNECTION.equals(action)){
                 Toast.makeText(LinearControlActivity.this, "蓝牙客户端掉线", Toast.LENGTH_SHORT).show();
-                sendProtocol.interrupt();//终止发送控制协议线程
-                recvProtocol.interrupt();//终止接收控制协议线程
+                sendProtocol.cancel();//终止发送控制协议线程
+                recvProtocol.cancel();//终止接收控制协议线程
             }
         }
     }
+    /*private class OnSeekBarChangeListenerSpeed implements SeekBar.OnSeekBarChangeListener {
+        @Override
+        public void onProgressChanged(SeekBar seekBar, int progress, boolean b) {
+            int speed = progress - seekBar.getMax()/2;
+            tv_speed.setText(String.valueOf(speed));
+            GlobalInfoVO.speed = speed;
+        }
+
+        @Override
+        public void onStartTrackingTouch(SeekBar seekBar) {
+
+        }
+
+        @Override
+        public void onStopTrackingTouch(SeekBar seekBar) {
+            vsb_speed.setProgress(vsb_speed.getMax()/2);
+        }
+    }*/
     private class OnSeekBarChangeListenerSpeed implements VerticalSeekBar.OnSeekBarChangeListener {
         @Override
         public void onProgressChanged(VerticalSeekBar VerticalSeekBar, int progress, boolean fromUser) {
-            int speed = progress - 100;
+            int speed = progress - VerticalSeekBar.getMax()/2;
             tv_speed.setText(String.valueOf(speed));
             GlobalInfoVO.speed = speed;
         }
@@ -230,13 +251,13 @@ public class LinearControlActivity extends Activity {
 
         @Override
         public void onStopTrackingTouch(VerticalSeekBar VerticalSeekBar) {
-            vsb_speed.setProgress(100);
+            VerticalSeekBar.setProgress(VerticalSeekBar.getMax()/2);
         }
     }
-    private class OnSeekBarChangeListenerDir implements SeekBar.OnSeekBarChangeListener {
+    private class OnSeekBarChangeListenerOffset implements SeekBar.OnSeekBarChangeListener {
         @Override
         public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-            int offset = progress - 100;
+            int offset = progress - seekBar.getMax()/2;
             tv_offset.setText(String.valueOf(offset));
             GlobalInfoVO.offset = offset;
         }
@@ -249,7 +270,63 @@ public class LinearControlActivity extends Activity {
         @Override
         public void onStopTrackingTouch(SeekBar seekBar) {
             //Toast.makeText(LinearControlActivity.this, String.valueOf(sb_offset.getProgress()), Toast.LENGTH_SHORT).show();
-            sb_offset.setProgress(100);
+            seekBar.setProgress(seekBar.getMax()/2);
+        }
+    }
+    private class OnSeekBarChangeListenerRudderY implements VerticalSeekBar.OnSeekBarChangeListener {
+
+        @Override
+        public void onProgressChanged(VerticalSeekBar VerticalSeekBar, int progress, boolean fromUser) {
+            int RudderY = progress;
+            tv_rudder_y.setText(String.valueOf(RudderY));
+            GlobalInfoVO.rudder_Y = RudderY;
+        }
+
+        @Override
+        public void onStartTrackingTouch(VerticalSeekBar VerticalSeekBar) {
+
+        }
+
+        @Override
+        public void onStopTrackingTouch(VerticalSeekBar VerticalSeekBar) {
+
+        }
+    }
+
+    /*private class OnSeekBarChangeListenerRudderY implements SeekBar.OnSeekBarChangeListener {
+        @Override
+        public void onProgressChanged(SeekBar seekBar, int progress, boolean b) {
+            int RudderY = progress;
+            tv_rudder_y.setText(String.valueOf(RudderY));
+            GlobalInfoVO.rudder_Y = RudderY;
+        }
+
+        @Override
+        public void onStartTrackingTouch(SeekBar seekBar) {
+
+        }
+
+        @Override
+        public void onStopTrackingTouch(SeekBar seekBar) {
+
+        }
+    }*/
+    private class OnSeekBarChangeListenerRudderX implements SeekBar.OnSeekBarChangeListener {
+        @Override
+        public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+            int RudderX = 180 - progress;
+            tv_rudder_x.setText(String.valueOf(RudderX));
+            GlobalInfoVO.rudder_x = RudderX;
+        }
+
+        @Override
+        public void onStartTrackingTouch(SeekBar seekBar) {
+
+        }
+
+        @Override
+        public void onStopTrackingTouch(SeekBar seekBar) {
+
         }
     }
 }

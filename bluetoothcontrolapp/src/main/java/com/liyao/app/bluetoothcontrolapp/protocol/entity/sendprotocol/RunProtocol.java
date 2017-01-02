@@ -5,7 +5,6 @@ import android.util.Log;
 
 import com.liyao.app.bluetoothcontrolapp.protocol.operation.ProtocolUtil;
 import com.liyao.app.bluetoothcontrolapp.protocol.entity.SendProtocolBase;
-
 import java.util.ArrayList;
 import java.util.List;
 

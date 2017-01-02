@@ -1,14 +1,9 @@
-package com.liyao.app.homecontrolcenter.protocolframe;
+package com.liyao.app.bluetoothcontrolapp.protocolframe;
 
 import android.util.Log;
 
 
-import com.liyao.app.homecontrolcenter.MessageManager;
-import com.liyao.app.homecontrolcenter.SocketManager;
-import com.liyao.app.homecontrolcenter.moduleboard.Coor_DHT11.receive_p.DHT11Protocol;
-import com.liyao.app.homecontrolcenter.moduleboard.SoilSensor.receive_p.SoilSensorStateProtocol;
-import com.liyao.app.homecontrolcenter.moduleboard.WaterMachine.receive_p.WaterStateProtocol;
-import com.liyao.app.homecontrolcenter.protocolframe.vo.TransmitDataVO;
+import com.liyao.app.bluetoothcontrolapp.protocolframe.vo.TransmitDataVO;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,24 +15,6 @@ import java.util.concurrent.BlockingQueue;
  */
 public class ProtocolManager {
     static final String TAG = "ProtocolManager";
-    //模块
-    public static final byte COORDINATOR_MODULE = 0x00;
-    public static final byte WATER_MODULE = 0x01;
-    public static final byte SOIL_SENSOR_MODULE = 0x02;
-    public static final byte GATETAY_MODULE = 0x0F;
-    /*协议列表*/
-    //网关发送协议
-    public static final short CMD_PROTOCOL = (short) ((GATETAY_MODULE << 4 | COORDINATOR_MODULE) << 8 |0x00);
-    //饮水机接收协议
-    public static final short WATER_STATE_PROTOCOL = (WATER_MODULE << 4 | COORDINATOR_MODULE) <<8 |0x20;
-    //饮水机发送协议
-    public static final short WATER_CMD_PROTOCOL = (COORDINATOR_MODULE << 4 | WATER_MODULE) <<8 |0x01;
-    public static final short WATER_STATEGET_PROTOCOL   = (COORDINATOR_MODULE << 4 | WATER_MODULE) <<8 |0x02;
-
-    //土壤传感器接收协议
-    public static final short SOIL_SENSOR_STATE_PROTOCOL = (SOIL_SENSOR_MODULE << 4 | COORDINATOR_MODULE) <<8 | 0x01;
-    //DHT11温湿度传感器接收协议
-    public static final short DHT11_STATE_PROTOCOL = (COORDINATOR_MODULE << 4 | GATETAY_MODULE) <<8 | 0x01;
     //public static ProtocolTransfer sendThread = new ProtocolTransfer();//发送线程
     //public static ProtocolMatch    recvThread = new ProtocolMatch();//接收线程
 
@@ -52,13 +29,9 @@ public class ProtocolManager {
 //    public static Lock recvProtocolList_Lock = new ReentrantLock();
 //    public static Lock sendProtocolList_Lock = new ReentrantLock();
     private static byte sendSerial = 0;
-    public static void Init(){
-        receiveRegister(new WaterStateProtocol()); //接收协议注册
-        receiveRegister(new SoilSensorStateProtocol()); //接收协议注册
-        receiveRegister(new DHT11Protocol()); //接收协议注册
-    }
 
-    private static void receiveRegister(RecvProtocolBase rpb){
+
+    public static void receiveRegister(RecvProtocolBase rpb){
         templateProtocolList.add(rpb);
     }
 
@@ -67,10 +40,6 @@ public class ProtocolManager {
      * @param spb
      */
     public static void sendProtocol(SendProtocolBase spb){
-        if(SocketManager.state != SocketManager.SocketState.OPEN){
-            MessageManager.send("控制中心未连接");
-            return;
-        }
         if(spb.integrityChecking() == true){
             try {
                 sendProtocolQueue.put(spb);

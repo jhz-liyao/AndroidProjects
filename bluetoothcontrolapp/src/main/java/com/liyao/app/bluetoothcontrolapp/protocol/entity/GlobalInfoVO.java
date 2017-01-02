@@ -9,6 +9,9 @@ public class GlobalInfoVO {
     public static int speed = 0;
     public static int offset = 0;
 
+    public static int rudder_x = 90;
+    public static int rudder_Y = 90;
+
     public static int angle = 0;//摇杆角度
     public static int deepness = 0;//摇杆深度
 

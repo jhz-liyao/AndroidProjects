@@ -34,11 +34,29 @@
             android:text="速度"
             android:id="@+id/tv_speed"/>
 
+        <com.liyao.app.bluetoothcontrolapp.customcontrol.VerticalSeekBar
+            android:layout_width="wrap_content"
+            android:layout_height="300dp"
+            android:max="200"
+            android:progress="100"
+            android:layout_alignParentBottom="true"
+            android:layout_toRightOf="@+id/tv_speed"
+            android:layout_marginLeft="30dp"
+            android:id="@+id/vsb_rudder_y" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@+id/vsb_rudder_y"
+            android:layout_marginBottom="150dp"
+            android:layout_alignParentBottom="true"
+            android:text="舵机Y"
+            android:id="@+id/tv_rudder_y"/>
+
         <TextView
             android:id="@+id/tv_show"
             android:layout_width="250dp"
             android:layout_height="80dp"
-            android:text="Hello World!" />
+            android:text="tv_show" />
     </RelativeLayout>
 
     <RelativeLayout android:id="@+id/rl_right"
@@ -54,14 +72,15 @@
             <TextView
                 android:id="@+id/tv_win_content"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent" />
+                android:layout_height="match_parent"
+                android:text="tv_win_content"/>
         </ScrollView>
 
         <SeekBar
             android:layout_width="200dp"
             android:layout_height="wrap_content"
-            android:max="200"
-            android:progress="100"
+            android:max="180"
+            android:progress="90"
             android:id="@+id/sb_offset"
             android:layout_alignParentRight="true"
             android:layout_alignParentBottom="true"/>
@@ -70,14 +89,35 @@
             android:layout_height="wrap_content"
             android:text="方向"
             android:layout_above="@+id/sb_offset"
-            android:layout_alignParentRight="true"
             android:layout_marginRight="100dp"
+            android:layout_alignRight="@+id/sb_offset"
             android:id="@+id/tv_offset"/>
+        <SeekBar
+            android:layout_width="200dp"
+            android:layout_height="wrap_content"
+            android:max="180"
+            android:progress="90"
+            android:id="@+id/sb_rudder_x"
+            android:layout_marginBottom="30dp"
+            android:layout_alignParentRight="true"
+            android:layout_above="@+id/tv_offset"
+            />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="舵机X"
+            android:layout_above="@+id/sb_rudder_x"
+            android:layout_marginRight="90dp"
+            android:layout_alignRight="@+id/sb_rudder_x"
+            android:id="@+id/tv_rudder_x"/>
+
+        <Button
+            android:id="@+id/btn_rudder_homing"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="云台归位"
+            android:layout_alignParentBottom="true"
+            android:layout_toLeftOf="@+id/sb_offset"
+            android:onClick="btn_rudder_homing_onClick"/>
 </RelativeLayout>
-
-
-
-
-
-
 </LinearLayout>

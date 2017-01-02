@@ -1,9 +1,7 @@
-package com.liyao.app.bluetoothcontrolapp.vo;
+package com.liyao.app.bluetoothcontrolapp.protocolframe.vo;
 
 import java.io.Serializable;
 import java.io.UnsupportedEncodingException;
-import java.lang.reflect.Array;
-import java.security.Timestamp;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;

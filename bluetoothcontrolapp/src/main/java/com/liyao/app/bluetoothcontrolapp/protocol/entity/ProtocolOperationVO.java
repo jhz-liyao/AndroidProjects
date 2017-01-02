@@ -1,6 +1,6 @@
 package com.liyao.app.bluetoothcontrolapp.protocol.entity;
 
-import com.liyao.app.bluetoothcontrolapp.vo.TransmitDataVO;
+import com.liyao.app.bluetoothcontrolapp.protocolframe.vo.TransmitDataVO;
 
 import java.io.UnsupportedEncodingException;
 import java.util.Arrays;

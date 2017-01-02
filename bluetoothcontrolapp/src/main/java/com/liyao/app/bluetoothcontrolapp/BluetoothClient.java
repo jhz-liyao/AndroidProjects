@@ -5,11 +5,11 @@ import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothSocket;
 import android.content.Context;
 import android.content.Intent;
+import android.os.SystemClock;
 import android.util.Log;
 
-import com.liyao.app.bluetoothcontrolapp.bluetooth_activity.ControlActivity;
-import com.liyao.app.bluetoothcontrolapp.bluetooth_interface.BluetoothCommunication;
-import com.liyao.app.bluetoothcontrolapp.vo.TransmitDataVO;
+import com.liyao.app.bluetoothcontrolapp.protocolframe.ProtocolTransferInterface;
+import com.liyao.app.bluetoothcontrolapp.protocolframe.vo.TransmitDataVO;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -26,10 +26,11 @@ public class BluetoothClient{
     public BluetoothDevice bluetoothDevice = null;
     Context context = null;
     ReadThread rt = null;
+    SendThread st = null;
     InputStream is = null;
     OutputStream os = null;
     private BluetoothAdapter bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
-    public BluetoothCommunication bluetoothCommunication;
+    public ProtocolTransferInterface bluetoothCommunication;
 
     /**
      * 初始化蓝牙设备
@@ -46,10 +47,10 @@ public class BluetoothClient{
                 socket.close();
             }
             socket.connect();
-            context.sendBroadcast(new Intent(ControlActivity.CONNECTION_SUCCESS));
+            context.sendBroadcast(new Intent(LinearControlActivity.CONNECTION_SUCCESS));
         } catch (Exception e) {
             e.printStackTrace();
-            context.sendBroadcast(new Intent(ControlActivity.CONNECTION_FAIL));
+            context.sendBroadcast(new Intent(LinearControlActivity.CONNECTION_FAIL));
             Log.w(TAG,"未连接到蓝牙设备");
         }
     }
@@ -60,6 +61,8 @@ public class BluetoothClient{
     public void start(){
         rt = new ReadThread();
         rt.start();
+        st = new SendThread();
+        st.start();
 
         try {
             os = socket.getOutputStream();
@@ -84,29 +87,63 @@ public class BluetoothClient{
      * 串口接收线程
      */
     public class ReadThread extends Thread{
+        public boolean exit = false;
+        public void cancel(){
+            exit = true;
+            this.interrupt();
+        }
         @Override
         public void run() {
             try {
+                SystemClock.sleep(500);
                 is = socket.getInputStream();
                 if (socket.isConnected() == false || is == null ) {
-                    Log.w(TAG,"socket未连接或InputStream为null ");
+                    Log.w(TAG,"ReadThread:socket未连接或InputStream为null ");
                     return;
                 }
                 byte readBuffer[] = new byte[1024];
-                TransmitDataVO recvDataVO = null;
-                while(!isInterrupted()){
+                while(!this.isInterrupted() && !exit) {
+
                     int count = is.read(readBuffer);
-                    recvDataVO = new TransmitDataVO();
-                    recvDataVO.setData(readBuffer);
-                    recvDataVO.setLen(count);
-                    bluetoothCommunication.receiveCallback(recvDataVO);
-                    }
-                }catch (IOException e) {
-                    e.printStackTrace();
-                    context.sendBroadcast(new Intent(ControlActivity.DISCONNECTION));
+                    TransmitDataVO vo = new TransmitDataVO();
+                    vo.setData(readBuffer);
+                    vo.setLen(count);
+                    bluetoothCommunication.socketRead(vo);
+                }
+            }catch (IOException e) {
+                e.printStackTrace();
+                context.sendBroadcast(new Intent(LinearControlActivity.DISCONNECTION));
             }
         }
     }
+
+    /**
+     * 串口发送线程
+     */
+    public class SendThread extends Thread{
+        public boolean exit = false;
+        public void cancel(){
+            exit = true;
+            this.interrupt();
+        }
+        @Override
+        public void run() {
+            SystemClock.sleep(500);
+            if (socket.isConnected() == false || os == null) {
+                Log.w(TAG, "SendThread:socket未连接或OutputStream为null");
+                return;
+            }
+            while(!this.isInterrupted() && !exit) {
+                try {
+                    TransmitDataVO vo = bluetoothCommunication.socketSend();
+                    os.write(vo.getData(), 0, vo.getLen());
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
+
 
     /**
      * 发送串口数据

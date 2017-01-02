@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -26,7 +27,7 @@ public class MainActivity extends AppCompatActivity {
         if(thread.getState() == Thread.State.TERMINATED)
            thread.start();
 //        else if(thread.getState() == Thread.State.RUNNABLE)
-            thread.interrupt();
+            thread.interrupt();SeekBar sb = null;
 
     }
     @Override
