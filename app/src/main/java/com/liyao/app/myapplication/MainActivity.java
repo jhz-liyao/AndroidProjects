@@ -12,6 +12,8 @@ import android.widget.Toast;
 
 
 public class MainActivity extends AppCompatActivity {
+
+
     Thread thread = new Thread(new Runnable() {
         @Override
         public void run() {
@@ -27,9 +29,11 @@ public class MainActivity extends AppCompatActivity {
         if(thread.getState() == Thread.State.TERMINATED)
            thread.start();
 //        else if(thread.getState() == Thread.State.RUNNABLE)
-            thread.interrupt();SeekBar sb = null;
+            thread.interrupt();
 
     }
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -77,5 +81,25 @@ public class MainActivity extends AppCompatActivity {
         //RelativeLayout =
 
         //        this.findViewById(R);
+        final VerticalBar vb_test = (VerticalBar)findViewById(R.id.vs_test);
+
+
+        SeekBar sb_test = (SeekBar)findViewById(R.id.sb_test);
+        sb_test.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                vb_test.setProgress(progress-1000);
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+
+            }
+        });
     }
 }

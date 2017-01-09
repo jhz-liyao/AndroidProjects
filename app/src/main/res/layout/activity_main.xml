@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-
+    xmlns:custom="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -28,7 +28,14 @@
     <SeekBar
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/seekBar" />
+        android:id="@+id/sb_test"
+        android:max="2000"/>
+    <com.liyao.app.myapplication.VerticalBar
+        android:id="@+id/vs_test"
+        android:layout_width="350px"
+        android:layout_height="800px"
+        custom:max="1000"
+        />
 
 
 </LinearLayout>
